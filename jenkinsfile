@@ -7,8 +7,8 @@ pipeline {
         stage('build') {
             steps {
                 echo 'build'
-                    if(params.ENV=="release"){
-                        withCredentials([usernamePassword(credentialsId: 'iti-sys-admin-sohag-docker-cred', usernameVariable: 'USERNAME_SOHAG', passwordVariable: 'PASSWORD_SOHAG')]) {
+                    if (params.ENV=="release"){
+                         withCredentials([usernamePassword(credentialsId: 'iti-sys-admin-sohag-docker-cred', usernameVariable: 'USERNAME_SOHAG', passwordVariable: 'PASSWORD_SOHAG')]) {
                             sh '''
                                 docker login -u ${USERNAME_SOHAG} -p ${PASSWORD_SOHAG}
                                 docker build -t kareemelkasaby/bakehouseitisohag:v${BUILD_NUMBER} .
@@ -29,8 +29,8 @@ pipeline {
             
             steps {
                 echo 'deploy'
-                    if(params.ENV=="dev"||params.ENV=="test"||params.ENV=="prod"){
-                        withCredentials([file(credentialsId: 'iti-sys-admin-sohag-kubeconfig-cred', variable: 'KUBECONFIG_SOHAG')]) {
+                    if (params.ENV=="dev"||params.ENV=="test"||params.ENV=="prod"){
+                         withCredentials([file(credentialsId: 'iti-sys-admin-sohag-kubeconfig-cred', variable: 'KUBECONFIG_SOHAG')]) {
                             sh '''
                                 export BUILD_NUMBER=cat$()../build.txt)
                                 mv Deployment/deploy.yaml Deployment/tmp.yaml
